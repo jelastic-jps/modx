@@ -1,0 +1,69 @@
+type: install
+jpsVersion: '0.2'
+id: modx
+name: MODX
+version: 2.4.2
+homepage: http://modx.com/
+categories:
+  - apps/content-management
+logo: https://download.jelastic.com/public.php?service=files&t=31c557554deca404d36d9354dc30d0c2&download
+description: MODX Revolution is the web content management platform for those that truly care about no-compromise design and exceptional user experience. It gives you complete control over your site and content, with the flexibility and scalability to adapt to your changing needs.
+
+mixins:
+- configs/vers.yaml
+
+globals:
+  DB_PASS: ${fn.password}
+  ADMIN_PASS: ${fn.password(10)}
+
+nodes:
+  - cloudlets: 8
+    nodeType: apache2
+    engine: php8.0
+  - cloudlets: 8
+    nodeType: mysql5
+    
+onInstall:
+  - deploy
+  - createDb
+  - configureApp
+  - restartNodes [cp]
+    
+actions:
+  deploy:
+    deploy:
+      name: modx-${globals.version_modx}.zip
+      context: ROOT
+      archive: https://modx.com/download/direct/modx-${globals.version_modx}.zip
+  createDb:
+    cmd[sqldb]: |-
+      MYSQL_PWD=${nodes.mysql5.password} mysql -uroot -e "CREATE DATABASE modx;"
+      MYSQL_PWD=${nodes.mysql5.password} mysql -uroot -e "CREATE USER 'modx'@'%' IDENTIFIED BY '${globals.DB_PASS}';"
+      MYSQL_PWD=${nodes.mysql5.password} mysql -uroot -e "GRANT ALL PRIVILEGES ON modx.* To 'modx'@'%' IDENTIFIED BY '${globals.DB_PASS}';"
+  configureApp:
+    - cmd [cp]: |-
+        ROOT="/var/www/webroot/ROOT/";
+        cp $ROOT/setup/config.dist.new.xml $ROOT/setup/config.xml
+        sed -i 's|<database_server>localhost<|<database_server>${nodes.mysql5.address}<|g' $ROOT/setup/config.xml
+        sed -i 's|<database>modx_modx<|<database>modx<|g' $ROOT/setup/config.xml
+        sed -i 's|<database_user>db_username<|<database_user>modx<|g' $ROOT/setup/config.xml
+        sed -i 's|<database_password>db_password|<database_password>${globals.DB_PASS}|g' $ROOT/setup/config.xml      
+        sed -i 's|<cmsadmin>username<|<cmsadmin>admin<|g' $ROOT/setup/config.xml
+        sed -i 's|<cmspassword>password<|<cmspassword>${globals.ADMIN_PASS}<|g' $ROOT/setup/config.xml
+        sed -i 's|<cmsadminemail>email@address.com<|<cmsadminemail>${user.email}<|g' $ROOT/setup/config.xml
+        sed -i 's|<context_mgr_path>/www/modx/manager/<|<context_mgr_path>/var/www/webroot/ROOT/manager/<|g' $ROOT/setup/config.xml
+        sed -i 's|<context_mgr_url>/modx/manager/<|<context_mgr_url>/manager/<|g' $ROOT/setup/config.xml
+        sed -i 's|<context_connectors_path>/www/modx/connectors/<|<context_connectors_path>/var/www/webroot/ROOT/connectors/<|g' $ROOT/setup/config.xml
+        sed -i 's|<context_connectors_url>/modx/connectors/<|<context_connectors_url>/modx/connectors/<|g' $ROOT/setup/config.xml
+        sed -i 's|<context_web_path>/www/modx/<|<context_web_path>/var/www/webroot/ROOT/<|g' $ROOT/setup/config.xml
+        sed -i 's|<context_web_url>/modx/<|<context_web_url>/<|g' $ROOT/setup/config.xml
+        
+    - cmd [cp]: sed -i 's|;extension=gd.so|extension=gd.so|g' /etc/php.ini
+      user: root
+
+startPage: manager/
+success: |-
+  Below you will find your admin panel link, username and password.  
+  Admin panel URL: [${env.protocol}://${env.domain}/manager/](${env.protocol}://${env.domain}/manager/)
+  Admin name: admin
+  Password: ${globals.ADMIN_PASS}
