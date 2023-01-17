@@ -9,6 +9,8 @@ categories:
 logo: https://download.jelastic.com/public.php?service=files&t=31c557554deca404d36d9354dc30d0c2&download
 description: MODX Revolution is the web content management platform for those that truly care about no-compromise design and exceptional user experience. It gives you complete control over your site and content, with the flexibility and scalability to adapt to your changing needs.
 
+baseUrl: https://raw.githubusercontent.com/jelastic-jps/modx/main/
+
 mixins:
 - configs/vers.yaml
 
@@ -56,7 +58,7 @@ actions:
         sed -i 's|<context_mgr_path>/www/modx/manager/<|<context_mgr_path>/var/www/webroot/ROOT/manager/<|g' $ROOT/setup/config.xml
         sed -i 's|<context_mgr_url>/modx/manager/<|<context_mgr_url>/manager/<|g' $ROOT/setup/config.xml
         sed -i 's|<context_connectors_path>/www/modx/connectors/<|<context_connectors_path>/var/www/webroot/ROOT/connectors/<|g' $ROOT/setup/config.xml
-        sed -i 's|<context_connectors_url>/modx/connectors/<|<context_connectors_url>/modx/connectors/<|g' $ROOT/setup/config.xml
+        sed -i 's|<context_connectors_url>/modx/connectors/<|<context_connectors_url>/connectors/<|g' $ROOT/setup/config.xml
         sed -i 's|<context_web_path>/www/modx/<|<context_web_path>/var/www/webroot/ROOT/<|g' $ROOT/setup/config.xml
         sed -i 's|<context_web_url>/modx/<|<context_web_url>/<|g' $ROOT/setup/config.xml
         cd $ROOT/setup && php ./index.php --installmode=new
