@@ -35,7 +35,7 @@ actions:
     deploy:
       name: modx-${globals.version_modx}.zip
       context: ROOT
-      archive: https://modx.com/download/direct/modx-${globals.version_modx}.zip
+      archive: https://modx.s3.amazonaws.com/releases/${globals.version_modx_short}/modx-${globals.version_modx}.zip
   createDb:
     cmd[sqldb]: |-
       MYSQL_PWD=${nodes.mysql5.password} mysql -uroot -e "CREATE DATABASE modx;"
