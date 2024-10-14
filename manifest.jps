@@ -15,15 +15,15 @@ mixins:
 - configs/vers.yaml
 
 globals:
-  DB_PASS: ${fn.password}
+  DB_PASS: ${fn.password(10)}
   ADMIN_PASS: ${fn.password(10)}
 
 nodes:
   - cloudlets: 8
     nodeType: apache2
-    engine: php8.0
+    engine: php8.2
   - cloudlets: 8
-    nodeType: mysql5
+    nodeType: mysql8
     
 onInstall:
   - deploy
@@ -36,11 +36,13 @@ actions:
       name: modx-${globals.version_modx}.zip
       context: ROOT
       archive: https://modx.s3.amazonaws.com/releases/${globals.version_modx_short}/modx-${globals.version_modx}.zip
+  
   createDb:
     cmd[sqldb]: |-
-      MYSQL_PWD=${nodes.mysql5.password} mysql -uroot -e "CREATE DATABASE modx;"
-      MYSQL_PWD=${nodes.mysql5.password} mysql -uroot -e "CREATE USER 'modx'@'%' IDENTIFIED BY '${globals.DB_PASS}';"
-      MYSQL_PWD=${nodes.mysql5.password} mysql -uroot -e "GRANT ALL PRIVILEGES ON modx.* To 'modx'@'%' IDENTIFIED BY '${globals.DB_PASS}';"
+      MYSQL_PWD=${nodes.mysql8.password} mysql -uroot -e "CREATE DATABASE modx;"
+      MYSQL_PWD=${nodes.mysql8.password} mysql -uroot -e "CREATE USER 'modx'@'%' IDENTIFIED BY '${globals.DB_PASS}';"
+      MYSQL_PWD=${nodes.mysql8.password} mysql -uroot -e "GRANT ALL PRIVILEGES ON modx.* TO 'modx'@'%' WITH GRANT OPTION;"
+      
   configureApp:
     - cmd [cp]: sed -i 's|;extension=gd.so|extension=gd.so|g' /etc/php.ini
       user: root
@@ -48,7 +50,7 @@ actions:
     - cmd [cp]: |-
         ROOT="/var/www/webroot/ROOT/";
         cp $ROOT/setup/config.dist.new.xml $ROOT/setup/config.xml
-        sed -i 's|<database_server>localhost<|<database_server>${nodes.mysql5.address}<|g' $ROOT/setup/config.xml
+        sed -i 's|<database_server>localhost<|<database_server>${nodes.mysql8.address}<|g' $ROOT/setup/config.xml
         sed -i 's|<database>modx_modx<|<database>modx<|g' $ROOT/setup/config.xml
         sed -i 's|<database_user>db_username<|<database_user>modx<|g' $ROOT/setup/config.xml
         sed -i 's|<database_password>db_password|<database_password>${globals.DB_PASS}|g' $ROOT/setup/config.xml      
