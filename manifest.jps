@@ -3,10 +3,10 @@ jpsVersion: '0.2'
 id: modx
 name: MODX
 version: 2.4.2
-homepage: http://modx.com/
+homepage: https://modx.com/
 categories:
   - apps/content-management
-logo: https://download.jelastic.com/public.php?service=files&t=31c557554deca404d36d9354dc30d0c2&download
+logo: images/modx.png
 description: MODX Revolution is the web content management platform for those that truly care about no-compromise design and exceptional user experience. It gives you complete control over your site and content, with the flexibility and scalability to adapt to your changing needs.
 
 baseUrl: https://raw.githubusercontent.com/jelastic-jps/modx/main/
