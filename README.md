@@ -4,7 +4,7 @@
 
 # MODX
 
-The package deploys the [MODX](https://modx.com/) CMS solution - an open-source, powerful, and flexible content management system (CMS) that helps users to build and maintain websites. It offers a high degree of customization and scalability, making it suitable for a wide range of web projects, from simple blogs to complex web applications.
+The package deploys the [MODX](https://modx.com/) CMS solution - an open-source, powerful, and flexible content management system (CMS) that helps users build and maintain websites. It offers a high degree of customization and scalability, making it suitable for a wide range of web projects, from simple blogs to complex web applications.
 
 
 ## Environment Topology
