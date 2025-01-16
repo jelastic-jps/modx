@@ -3,11 +3,11 @@ jpsVersion: '0.2'
 id: modx
 name: MODX
 version: 2.4.2
-homepage: http://modx.com/
+homepage: https://modx.com/
 categories:
   - apps/content-management
-logo: https://download.jelastic.com/public.php?service=files&t=31c557554deca404d36d9354dc30d0c2&download
-description: MODX Revolution is the web content management platform for those that truly care about no-compromise design and exceptional user experience. It gives you complete control over your site and content, with the flexibility and scalability to adapt to your changing needs.
+logo: images/modx.png
+description: MODX is the web content management platform for those who care about no-compromise design and exceptional user experience. It gives you complete control over your site and content, with the flexibility and scalability to adapt to your changing needs.
 
 baseUrl: https://raw.githubusercontent.com/jelastic-jps/modx/main/
 
@@ -67,7 +67,10 @@ actions:
 
 startPage: manager/
 success: |-
-  Below you will find your admin panel link, username and password.  
-  Admin panel URL: [${env.protocol}://${env.domain}/manager/](${env.protocol}://${env.domain}/manager/)  
-  Admin name: admin  
-  Password: ${globals.ADMIN_PASS}
+  Use the following credentials to access the MODX admin panel:
+  
+  **Admin panel URL:** [${env.protocol}://${env.domain}/manager/](${env.protocol}://${env.domain}/manager/)  
+  **Admin name:** admin  
+  **Admin password:** ${globals.ADMIN_PASS}
+  
+  To add a custom domain name for your MODX installation, follow the steps described in our [documentation](https://www.virtuozzo.com/application-platform-docs/custom-domains/).
