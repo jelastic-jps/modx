@@ -14,6 +14,9 @@ baseUrl: https://raw.githubusercontent.com/jelastic-jps/modx/main/
 mixins:
 - configs/vers.yaml
 
+ssl: true
+skipNodeEmails: true
+
 globals:
   DB_PASS: ${fn.password(10)}
   ADMIN_PASS: ${fn.password(10)}
