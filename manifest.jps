@@ -9,7 +9,7 @@ categories:
 logo: images/modx.png
 description: MODX is the web content management platform for those who care about no-compromise design and exceptional user experience. It gives you complete control over your site and content, with the flexibility and scalability to adapt to your changing needs.
 
-baseUrl: https://raw.githubusercontent.com/jelastic-jps/modx/main/
+baseUrl: https://cdn.jsdelivr.net/gh/jelastic-jps/modx@main/
 
 mixins:
 - configs/vers.yaml
